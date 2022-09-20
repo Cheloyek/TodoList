@@ -4,9 +4,10 @@ import React from 'react';
 type TodoListPropsType = {
     title: string
     tasks: Array<TaskType> // tasks с типом TaskType
+    removeTask: (taskId:number) => void //void всегда возвращает undefined, void может быть заменен на другой тип
 }
 
-type TaskType = {
+export type TaskType = {
     id: number
     title: string
     isDone: boolean
@@ -15,16 +16,16 @@ type TaskType = {
 // rsc
 // в функцию передали props (параметры функции).props - объект
 const TodoList = (props: TodoListPropsType) => {
-
-    const tasksList = props.tasks.map((task) => {
+    const getTasksListItem = (t: TaskType) => {
         return (
-            <li>
-                <input type="checkbox" checked={task.isDone}/>
-                <span>{task.title}</span>
+            <li key={t.id}>
+                <input type={"checkbox"} checked={t.isDone}/>
+                <span>{t.title}</span>
+                <button onClick={() => props.removeTask(t.id)}>x</button>
             </li>
         )
-    })
-
+    }
+    const tasksList = props.tasks.map(getTasksListItem)
     return (
         <div>
             <h3>{props.title}</h3>
@@ -45,6 +46,6 @@ const TodoList = (props: TodoListPropsType) => {
             </div>
         </div>
     );
-};
+}
 
 export default TodoList;
