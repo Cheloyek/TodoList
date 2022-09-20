@@ -15,6 +15,7 @@ export type TaskType = {
 
 // rsc
 // в функцию передали props (параметры функции).props - объект
+// привязали функцию к кнопке
 const TodoList = (props: TodoListPropsType) => {
     const getTasksListItem = (t: TaskType) => {
         return (
