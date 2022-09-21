@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 
+type FilterValuesType = "all" | "active" | "completed" // filter Type
 
 // component
 function App() {
@@ -16,6 +17,9 @@ function App() {
     //     {id: 11, title: "RTK", isDone: false}, // => <li>{...}</li>
     // ];
     //React.useState()
+
+    const [filter, setFilter] = useState<FilterValuesType>("all") //filter
+
     const [tasks, setTasks] = useState<Array<TaskType>>([
         {id: 1, title: "HTML&CSS", isDone: true}, // => <li>{...}</li>
         {id: 2, title: "JS", isDone: true}, // => <li>{...}</li>
