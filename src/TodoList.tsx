@@ -1,10 +1,12 @@
 import React from 'react';
+import {FilterValuesType} from "./App";
 
 // props type
 type TodoListPropsType = {
     title: string
     tasks: Array<TaskType> // tasks с типом TaskType
-    removeTask: (taskId:number) => void //void всегда возвращает undefined, void может быть заменен на другой тип
+    removeTask: (taskId:number) => void, //void всегда возвращает undefined, void может быть заменен на другой тип
+    changeFilter: (filter: FilterValuesType) => void
 }
 
 export type TaskType = {
@@ -41,9 +43,15 @@ const TodoList = (props: TodoListPropsType) => {
                 {/*<li><input type="checkbox" checked={props.tasks[2].isDone}/><span>{props.tasks[2].title}</span></li>*/}
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button
+                    onClick={() => props.changeFilter("all")}
+                >All</button>
+                <button
+                    onClick={() => props.changeFilter("active")}
+                >Active</button>
+                <button
+                    onClick={() => props.changeFilter("completed")}
+                >Completed</button>
             </div>
         </div>
     );
