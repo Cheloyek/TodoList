@@ -1,6 +1,10 @@
 import React, {useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
+import {v1} from "uuid";
+
+
+
 
 export type FilterValuesType = "all" | "active" | "completed" // filter Type
 
@@ -17,15 +21,16 @@ function App() {
     //     {id: 11, title: "RTK", isDone: false}, // => <li>{...}</li>
     // ];
     //React.useState()
-
+    //console.log(v1()) // всегда генерирует уникальную строку формата: b5354840-3e05-11ed-9204-b96e18166926
     const [filter, setFilter] = useState<FilterValuesType>("active") //filter
 
+    //v1() - генерирует уникальный id тип string
     const [tasks, setTasks] = useState<Array<TaskType>>([
-        {id: 1, title: "HTML&CSS", isDone: true}, // => <li>{...}</li>
-        {id: 2, title: "JS", isDone: true}, // => <li>{...}</li>
-        {id: 3, title: "React", isDone: false}, // => <li>{...}</li>
-        {id: 10, title: "Redux", isDone: false}, // => <li>{...}</li>
-        {id: 11, title: "RTK", isDone: false}, // => <li>{...}</li>
+        {id: v1(), title: "HTML&CSS", isDone: true}, // => <li>{...}</li>
+        {id: v1(), title: "JS", isDone: true}, // => <li>{...}</li>
+        {id: v1(), title: "React", isDone: false}, // => <li>{...}</li>
+        {id: v1(), title: "Redux", isDone: false}, // => <li>{...}</li>
+        {id: v1(), title: "RTK", isDone: false}, // => <li>{...}</li>
     ])
     // или так
     // let tasks = result[0] // переменная для хранения данных
@@ -36,7 +41,7 @@ function App() {
     // у одного значение совпаден и вернет false, в массив не попадет
     // перезапишем переменную tasks
     // функцию нужно передать через props в TodoList и добавить в Type
-    const removeTask = (taskId: number) => {
+    const removeTask = (taskId: string) => {
         setTasks(tasks.filter((t) => t.id !== taskId)) // true || false проверяет каждое значение
         console.log(tasks)
     }
@@ -45,23 +50,41 @@ function App() {
         setFilter(filter)
     }
 
-    let tasksForTodoList = tasks;
-    if (filter === "active") {
-        tasksForTodoList = tasks.filter(t => t.isDone === false)
+    //добавление task
+    const addTask = (title: string) => {
+        const newTask: TaskType = {
+            id: v1(),
+            title: title,
+            isDone: false
+        }
+        //добавление новой task в список
+        // const copyTasks = [...tasks]
+        // copyTasks.push(newTask)
+        // setTasks(copyTasks)
+        setTasks([...tasks, newTask])
     }
-    if (filter === "completed") {
-        tasksForTodoList = tasks.filter(t => t.isDone === true)
+
+    const getFilteredTasks = (t: Array<TaskType>, filter: FilterValuesType) => {
+        let tasksForTodoList = t;
+        if (filter === "active") {
+            tasksForTodoList = t.filter(t => !t.isDone)
+        }
+        if (filter === "completed") {
+            tasksForTodoList = t.filter(t => t.isDone)
+        }
+        return tasksForTodoList
     }
+
 
 
     // GUI:
     return (
         <div className="App">
-            <TodoList
-                tasks={tasksForTodoList}
+            <TodoList tasks={getFilteredTasks(tasks, filter)}
                 title={todoListTitle}
                 removeTask={removeTask}
                 changeFilter={changeFilter}
+                addTask={addTask}
             />
         </div>
     );

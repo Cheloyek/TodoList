@@ -1,16 +1,17 @@
-import React from 'react';
+import React, {useState, KeyboardEvent, ChangeEvent} from 'react';
 import {FilterValuesType} from "./App";
 
 // props type
 type TodoListPropsType = {
     title: string
     tasks: Array<TaskType> // tasks с типом TaskType
-    removeTask: (taskId:number) => void, //void всегда возвращает undefined, void может быть заменен на другой тип
+    removeTask: (taskId:string) => void, //void всегда возвращает undefined, void может быть заменен на другой тип
     changeFilter: (filter: FilterValuesType) => void
+    addTask: (title:string) => void
 }
 
 export type TaskType = {
-    id: number
+    id: string
     title: string
     isDone: boolean
 }
@@ -19,22 +20,44 @@ export type TaskType = {
 // в функцию передали props (параметры функции).props - объект
 // привязали функцию к кнопке
 const TodoList = (props: TodoListPropsType) => {
+    //local state для хранения ввода до нажатия кнопки
+    const [title, setTitle] = useState<string>('')
+    console.log(title)
+    //
     const getTasksListItem = (t: TaskType) => {
+        const removeTask = () => props.removeTask(t.id)
         return (
             <li key={t.id}>
                 <input type={"checkbox"} checked={t.isDone}/>
                 <span>{t.title}</span>
-                <button onClick={() => props.removeTask(t.id)}>x</button>
+                <button onClick={removeTask}>x</button>
             </li>
         )
     }
     const tasksList = props.tasks.map(getTasksListItem)
+    const addTask = () => {
+        const trimmedTitle = title.trim()// удаляет пробелы из начала и конца строки
+        if(trimmedTitle !== ''){
+            props.addTask(trimmedTitle)
+        }
+        setTitle('')
+    }
+
+    const handlerCreator = (filter: FilterValuesType) => () => props.changeFilter(filter)
+
+    const onEnterDownAddTask = (e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && addTask()
+    const onChangeSetLocalTitle = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
+
     return (
         <div>
             <h3>{props.title}</h3>
             <div>
-                <input/>
-                <button>+</button>
+                <input
+                    value={title}
+                    onChange={onChangeSetLocalTitle}
+                    onKeyDown={onEnterDownAddTask}
+                />
+                <button onClick= {addTask}>+</button>
             </div>
             <ul>
                 {tasksList}
@@ -44,14 +67,18 @@ const TodoList = (props: TodoListPropsType) => {
             </ul>
             <div>
                 <button
-                    onClick={() => props.changeFilter("all")}
-                >All</button>
+                    // onClick={() => props.changeFilter("all")}
+                    onClick = {handlerCreator('all')}
+                >All
+                </button>
                 <button
-                    onClick={() => props.changeFilter("active")}
-                >Active</button>
+                    onClick={handlerCreator("active")}
+                >Active
+                </button>
                 <button
-                    onClick={() => props.changeFilter("completed")}
-                >Completed</button>
+                    onClick={handlerCreator("completed")}
+                >Completed
+                </button>
             </div>
         </div>
     );
