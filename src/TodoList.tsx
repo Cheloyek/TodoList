@@ -29,10 +29,12 @@ const TodoList = (props: TodoListPropsType) => {
         const removeTask = () => props.removeTask(t.id)
 
 //изменение isDone каждой таски
+        const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>)=>props.changeTaskStatus(t.id, e.currentTarget.checked)
         return (
-            <li key={t.id}>
+            //если isDone = true, применит класс isDone css
+            <li key={t.id} className={t.isDone ? "isDone" : "notIsDone"}>
                 <input
-                    onChange={(e)=>props.changeTaskStatus(t.id, e.currentTarget.checked)}
+                    onChange={changeTaskStatus}
                     type={"checkbox"}
                     checked={t.isDone}/>
                 <span>{t.title}</span>
