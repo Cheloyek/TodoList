@@ -8,6 +8,7 @@ type TodoListPropsType = {
     removeTask: (taskId:string) => void, //void всегда возвращает undefined, void может быть заменен на другой тип
     changeFilter: (filter: FilterValuesType) => void
     addTask: (title:string) => void
+    changeTaskStatus: (taskId: string, newStatus: boolean) => void
 }
 
 export type TaskType = {
@@ -26,9 +27,14 @@ const TodoList = (props: TodoListPropsType) => {
     //
     const getTasksListItem = (t: TaskType) => {
         const removeTask = () => props.removeTask(t.id)
+
+//изменение isDone каждой таски
         return (
             <li key={t.id}>
-                <input type={"checkbox"} checked={t.isDone}/>
+                <input
+                    onChange={(e)=>props.changeTaskStatus(t.id, e.currentTarget.checked)}
+                    type={"checkbox"}
+                    checked={t.isDone}/>
                 <span>{t.title}</span>
                 <button onClick={removeTask}>x</button>
             </li>

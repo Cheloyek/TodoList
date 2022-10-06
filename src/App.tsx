@@ -24,7 +24,9 @@ function App() {
     //console.log(v1()) // всегда генерирует уникальную строку формата: b5354840-3e05-11ed-9204-b96e18166926
     const [filter, setFilter] = useState<FilterValuesType>("active") //filter
 
+    // создан локальный state
     //v1() - генерирует уникальный id тип string
+    // setTasks работает асинхронно
     const [tasks, setTasks] = useState<Array<TaskType>>([
         {id: v1(), title: "HTML&CSS", isDone: true}, // => <li>{...}</li>
         {id: v1(), title: "JS", isDone: true}, // => <li>{...}</li>
@@ -48,6 +50,15 @@ function App() {
 
     const changeFilter = (filter: FilterValuesType) => {
         setFilter(filter)
+    }
+    const changeTaskStatus = (taskId: string, newStatus: boolean) => {
+        //при нажатии на checkbox находит значение и меняет isDone
+        const updatedTasks: Array<TaskType> = tasks.map(t => t.id === taskId ? {...t, isDone: newStatus} : t)
+            //создается новый массив? в котором лежат старые tasks и у task у которых id === taskID меняется значение isDone
+        // ...t = {id: v1(), title: "HTML&CSS", isDone: true}
+
+        //перерисовывание
+        setTasks(updatedTasks)
     }
 
     //добавление task
@@ -85,6 +96,7 @@ function App() {
                 removeTask={removeTask}
                 changeFilter={changeFilter}
                 addTask={addTask}
+                      changeTaskStatus={changeTaskStatus}
             />
         </div>
     );
