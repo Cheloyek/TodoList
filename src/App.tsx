@@ -54,7 +54,7 @@ function App() {
     const changeTaskStatus = (taskId: string, newStatus: boolean) => {
         //при нажатии на checkbox находит значение и меняет isDone
         const updatedTasks: Array<TaskType> = tasks.map(t => t.id === taskId ? {...t, isDone: newStatus} : t)
-            //создается новый массив? в котором лежат старые tasks и у task у которых id === taskID меняется значение isDone
+            //создается новый массив, в котором лежат старые tasks и у task у которых id === taskID меняется значение isDone
         // ...t = {id: v1(), title: "HTML&CSS", isDone: true}
 
         //перерисовывание
@@ -97,7 +97,7 @@ function App() {
                 changeFilter={changeFilter}
                 addTask={addTask}
                 changeTaskStatus={changeTaskStatus}
-                      filter={filter}
+                filter={filter}
             />
         </div>
     );

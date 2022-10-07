@@ -21,13 +21,25 @@
 }
 
 /*для нажатой кнопки*/
-.activeBtn {
+.active-btn {
   background-color: green;
-  color: lime;
+  padding: 5px;
+  margin-right: 3px;
+  color: aquamarine;
+  font-weight: bold;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
 }
 
 /*для не нажатой кнопки*/
 .btn {
   background-color: gray;
   color: aquamarine;
+}
+
+/*если при вводе в input будет ошибка (например нет текста), то применит .error*/
+.error {
+  border: 2px solid hotpink;
+  outline: none;
 }

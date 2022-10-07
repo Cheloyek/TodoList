@@ -24,7 +24,10 @@ export type TaskType = {
 const TodoList = (props: TodoListPropsType) => {
     //local state для хранения ввода до нажатия кнопки
     const [title, setTitle] = useState<string>('')
-    console.log(title)
+
+    //хранение данных о вводе с ошибкой, если получено true - перерисует компоненту. Когда пользователь нажмет кнопку
+    const [error, setError] = useState<boolean>(false)
+    // console.log(title)
     //
     const getTasksListItem = (t: TaskType) => {
         const removeTask = () => props.removeTask(t.id)
@@ -43,11 +46,17 @@ const TodoList = (props: TodoListPropsType) => {
             </li>
         )
     }
-    const tasksList = props.tasks.map(getTasksListItem)
+    //если что-то есть (props.tasks.length) то покажет props.tasks.map(getTasksListItem), если нет то выведет сообщение
+    const tasksList = props.tasks.length
+        ? props.tasks.map(getTasksListItem)
+        : <span>Your taskslist is empty</span>
     const addTask = () => {
         const trimmedTitle = title.trim()// удаляет пробелы из начала и конца строки
+        // если при вводе есть данные то добавляет task, если нет данных то передает в setError true
         if(trimmedTitle !== ''){
             props.addTask(trimmedTitle)
+        } else {
+            setError(true)
         }
         setTitle('')
     }
@@ -55,7 +64,13 @@ const TodoList = (props: TodoListPropsType) => {
     const handlerCreator = (filter: FilterValuesType) => () => props.changeFilter(filter)
 
     const onEnterDownAddTask = (e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && addTask()
-    const onChangeSetLocalTitle = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
+    const onChangeSetLocalTitle = (e: ChangeEvent<HTMLInputElement>) => {
+        error && setError(false); {/*когда после ошибки пользователь начинает вводить, ошибка исчезает*/}
+        setTitle(e.currentTarget.value)
+    }
+
+    //сообщение об ошибке. Если error есть выведет <div>Title is required!</div>, если нет ошибки =null, элемент не создаст
+    const errorMessage = error ? <div style={{fontWeight: "bold", color: "hotpink"}}>Title is required!</div>: null
 
     return (
         <div>
@@ -65,8 +80,11 @@ const TodoList = (props: TodoListPropsType) => {
                     value={title}
                     onChange={onChangeSetLocalTitle}
                     onKeyDown={onEnterDownAddTask}
+                    className={error ? 'error' : ''} // обработка error
                 />
                 <button onClick= {addTask}>+</button>
+                {/*вывод сообщения при ошибке*/}
+                {errorMessage}
             </div>
             <ul>
                 {tasksList}
@@ -77,18 +95,18 @@ const TodoList = (props: TodoListPropsType) => {
             <div>
                 <button
                     // если нажата кнопка 'all' присваивает className activeBtn, если не нажата btn
-                    className={props.filter === 'all' ? 'activeBtn' : 'btn'}
+                    className={props.filter === 'all' ? 'active-btn btn' : 'btn'}
                     // onClick={() => props.changeFilter("all")}
                     onClick = {handlerCreator('all')}
                 >All
                 </button>
                 <button
-                    className={props.filter === 'active' ? 'activeBtn' : 'btn'}
+                    className={props.filter === 'active' ? 'active-btn btn' : 'btn'}
                     onClick={handlerCreator("active")}
                 >Active
                 </button>
                 <button
-                    className={props.filter === 'completed' ? 'activeBtn' : 'btn'}
+                    className={props.filter === 'completed' ? 'active-btn btn' : 'btn'}
                     onClick={handlerCreator("completed")}
                 >Completed
                 </button>
