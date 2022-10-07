@@ -7,13 +7,27 @@
   margin-right: 50px;
 }
 
+/*для выполненной task*/
 .isDone {
   text-decoration: line-through;
   font-weight: bold;
   color: limegreen;
 }
 
+/*для невыполненной task*/
 .notIsDone {
   font-weight: bold;
   color: hotpink;
+}
+
+/*для нажатой кнопки*/
+.activeBtn {
+  background-color: green;
+  color: lime;
+}
+
+/*для не нажатой кнопки*/
+.btn {
+  background-color: gray;
+  color: aquamarine;
 }

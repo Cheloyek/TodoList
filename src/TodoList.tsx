@@ -5,6 +5,7 @@ import {FilterValuesType} from "./App";
 type TodoListPropsType = {
     title: string
     tasks: Array<TaskType> // tasks с типом TaskType
+    filter: FilterValuesType
     removeTask: (taskId:string) => void, //void всегда возвращает undefined, void может быть заменен на другой тип
     changeFilter: (filter: FilterValuesType) => void
     addTask: (title:string) => void
@@ -75,15 +76,19 @@ const TodoList = (props: TodoListPropsType) => {
             </ul>
             <div>
                 <button
+                    // если нажата кнопка 'all' присваивает className activeBtn, если не нажата btn
+                    className={props.filter === 'all' ? 'activeBtn' : 'btn'}
                     // onClick={() => props.changeFilter("all")}
                     onClick = {handlerCreator('all')}
                 >All
                 </button>
                 <button
+                    className={props.filter === 'active' ? 'activeBtn' : 'btn'}
                     onClick={handlerCreator("active")}
                 >Active
                 </button>
                 <button
+                    className={props.filter === 'completed' ? 'activeBtn' : 'btn'}
                     onClick={handlerCreator("completed")}
                 >Completed
                 </button>
