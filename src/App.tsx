@@ -129,6 +129,7 @@ function App() {
         // setTasks([...tasks, newTask])
     }
 
+    //функция получает Array и фильтрует по переданному фильтру tasks
     const getFilteredTasks = (t: Array<TaskType>, filter: FilterValuesType) => {
         let tasksForTodoList = t;
         if (filter === "active") {
@@ -141,20 +142,35 @@ function App() {
     }
 
 
+    // проходится по массиву листов (каждый лист => возвращает return). В результате появится массив компонент
+    const todoListComponents = todoLists.map(tl => {
+        const filteredTasks = getFilteredTasks(tasks[tl.id], tl.filter) // tasks[tl.id] - получает массив всех task листа. tl.filter = "all" | "active" | "completed"
+        return (
+                <TodoList
+                    //data
+                    key={tl.id}
+                    title={tl.title}        // title из каждого листа
+                    filter={tl.filter}      // "all" | "active" | "completed"
+                    todoListId={tl.id}      //id из каждого листа для компонены
+                    tasks={filteredTasks}
+
+                    //functions
+                    addTask={addTask}
+                    removeTask={removeTask}
+                    removeTodoList={removeTodoList}
+                    changeTaskStatus={changeTaskStatus}
+                    changeTodoListFilter={changeTodoListFilter}
+                />
+
+        );
+    })
 
     // GUI:
-    return (
-        <div className="App">
-            <TodoList tasks={getFilteredTasks(tasks, filter)}
-                title={todoListTitle}
-                removeTask={removeTask}
-                changeFilter={changeTodoListFilter}
-                addTask={addTask}
-                changeTaskStatus={changeTaskStatus}
-                filter={filter}
-            />
-        </div>
-    );
+        return (
+                <div className="App">
+                    {todoListComponents}
+                </div>
+            )
 }
 
 export default App;
