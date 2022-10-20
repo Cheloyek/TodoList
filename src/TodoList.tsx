@@ -1,5 +1,7 @@
-import React, {useState, KeyboardEvent, ChangeEvent} from 'react';
+import React, {ChangeEvent} from 'react';
 import {FilterValuesType} from "./App";
+import AddItemForm from "./AddItemForm";
+import EditableSpan from "./EditableSpan";
 
 // props type
 type TodoListPropsType = {
@@ -25,11 +27,6 @@ export type TaskType = {
 // привязали функцию к кнопке
 // функция вызывается количество раз = количество листов
 const TodoList = (props: TodoListPropsType) => {
-    //local state для хранения ввода до нажатия кнопки
-    const [title, setTitle] = useState<string>('')
-
-    //хранение данных о вводе с ошибкой, если получено true - перерисует компоненту. Когда пользователь нажмет кнопку
-    const [error, setError] = useState<boolean>(false)
 
     //получить элемент списка
     const getTasksListItem = (t: TaskType) => {
@@ -42,8 +39,10 @@ const TodoList = (props: TodoListPropsType) => {
                 <input
                     onChange={changeTaskStatus}
                     type={"checkbox"}
-                    checked={t.isDone}/>
-                <span>{t.title}</span>
+                    checked={t.isDone}
+                />
+                <EditableSpan title={t.title}/> {/*редактирование строки*/}
+                {/*<span>{t.title}</span>*/}
                 <button onClick={removeTask}>x</button>
             </li>
         )
@@ -54,30 +53,16 @@ const TodoList = (props: TodoListPropsType) => {
         ? props.tasks.map(getTasksListItem) // то создаем список и внутрь список объектов
         : <span>Your taskslist is empty</span>       // если пустой
 
-    const addTask = () => {
-        const trimmedTitle = title.trim()// удаляет пробелы из начала и конца строки
-        // если при вводе есть данные то добавляет task, если нет данных то передает в setError true
-        if(trimmedTitle !== ''){
-            // добавление task с указанным названием в определенные лист props.todoListId
-            props.addTask(trimmedTitle, props.todoListId)
-        } else {
-            setError(true)
-        }
-        setTitle('')
+
+    const addTask = (title: string) => {
+        props.addTask(title, props.todoListId)
     }
 
     //функция возвращает функцию
     const handlerCreator = (filter: FilterValuesType) => () => props.changeTodoListFilter(filter, props.todoListId)
 
-    const onEnterDownAddTask = (e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && addTask()
-    const onChangeSetLocalTitle = (e: ChangeEvent<HTMLInputElement>) => {
-        error && setError(false); {/*когда после ошибки пользователь начинает вводить, ошибка исчезает*/}
-        setTitle(e.currentTarget.value)
-    }
-    const removeTodoList = () => props.removeTodoList(props.todoListId)
 
-    //сообщение об ошибке. Если error есть выведет <div>Title is required!</div>, если нет ошибки =null, элемент не создаст
-    const errorMessage = error ? <div style={{fontWeight: "bold", color: "hotpink"}}>Title is required!</div>: null
+    const removeTodoList = () => props.removeTodoList(props.todoListId)
 
     return (
         <div>
@@ -85,17 +70,7 @@ const TodoList = (props: TodoListPropsType) => {
                 {props.title}
                 <button onClick={removeTodoList}>x</button>
             </h3>
-            <div>
-                <input
-                    value={title}
-                    onChange={onChangeSetLocalTitle}
-                    onKeyDown={onEnterDownAddTask}
-                    className={error ? 'error' : ''} // обработка error
-                />
-                <button onClick= {addTask}>+</button>
-                {/*вывод сообщения при ошибке*/}
-                {errorMessage}
-            </div>
+            <AddItemForm addItem={addTask}/> {/*компонента добавляет tasks*/}
             <ul>
                 {tasksList}
                 {/*<li><input type="checkbox" checked={props.tasks[0].isDone}/><span>{props.tasks[0].title}</span></li>*/}

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 import {v1} from "uuid";
+import AddItemForm from "./AddItemForm";
 
 
 
@@ -21,6 +22,7 @@ type TasksStateType = {
 
 // component
 function App() {
+
     // BLL (бизнес логика, хранение данных):
     // с возможностью удаления/добавления новых листов
 
@@ -110,8 +112,20 @@ function App() {
     })
     }
 
-    //добавление task
+    //-----ДОБАВЛЕНИЕ нового листа, пользователь передает title------
+    const addTodoList = (title:string) => {
+        const newTodoListId: string = v1()
+        const newTodoList: TodoListType = {
+            id: newTodoListId,
+            title: title,
+            filter: "all"
+        }
 
+        setTodoLists([...todoLists, newTodoList]) /*добавляет todolist в массив листов*/
+        setTasks({...tasks, [newTodoListId]: [] }) /*в новый todoList добавили массив, в который будут добавляться новые tasks*/
+    }
+
+    //добавление task
     const addTask = (title: string, todoListId: string) => {
         const newTask: TaskType = {
             id: v1(),
@@ -168,6 +182,8 @@ function App() {
     // GUI:
         return (
                 <div className="App">
+                    Добавить лист
+                    <AddItemForm addItem={addTodoList}/>
                     {todoListComponents}
                 </div>
             )
