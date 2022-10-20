@@ -14,6 +14,8 @@ type TodoListPropsType = {
     addTask: (title:string, todoListId: string, ) => void
     changeTaskStatus: (taskId: string, newStatus: boolean, todoListId: string) => void
     removeTodoList: (todoListId: string) => void
+    changeTaskTitle: (taskId: string, title: string, todoListId:string) => void
+    changeTodoListTitle: (title: string, todoListId: string) => void
 }
 
 export type TaskType = {
@@ -33,6 +35,10 @@ const TodoList = (props: TodoListPropsType) => {
         const removeTask = () => props.removeTask(t.id, props.todoListId)
         //изменение isDone каждой task
         const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>)=>props.changeTaskStatus(t.id, e.currentTarget.checked, props.todoListId)
+        //редактирование taskTitle
+        const changeTaskTitle = (title: string) => {
+            props.changeTaskTitle (t.id, title, props.todoListId)
+        }
         return (
             //если isDone = true, применит класс isDone css
             <li key={t.id} className={t.isDone ? "isDone" : "notIsDone"}>
@@ -41,7 +47,7 @@ const TodoList = (props: TodoListPropsType) => {
                     type={"checkbox"}
                     checked={t.isDone}
                 />
-                <EditableSpan title={t.title}/> {/*редактирование строки*/}
+                <EditableSpan title={t.title} changeTitle={changeTaskTitle}/> {/*редактирование строки*/}
                 {/*<span>{t.title}</span>*/}
                 <button onClick={removeTask}>x</button>
             </li>
@@ -63,11 +69,12 @@ const TodoList = (props: TodoListPropsType) => {
 
 
     const removeTodoList = () => props.removeTodoList(props.todoListId)
-
+    //изменение названия листа
+    const changeTodoListTitle = (title:string) => props.changeTodoListTitle(title, props.todoListId)
     return (
         <div>
             <h3>
-                {props.title}
+                <EditableSpan title={props.title} changeTitle={changeTodoListTitle}/>
                 <button onClick={removeTodoList}>x</button>
             </h3>
             <AddItemForm addItem={addTask}/> {/*компонента добавляет tasks*/}

@@ -90,6 +90,11 @@ function App() {
         //создание копии масс листов, в массиве проверяет каждый и находит t.id === todoListId и создается копия листа в filter: filter
         setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, filter: filter}: tl))
     }
+
+    const changeTodoListTitle = (title: string, todoListId: string) => {
+        setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, title: title}: tl))
+    }
+
     //удаление листа
     const removeTodoList = (todoListId: string) => {
         //фильтр листов (у которых id !== todoListId удаляет лист)
@@ -110,6 +115,16 @@ function App() {
                 ? {...t, isDone: newTaskStatus}
                 : t)
     })
+    }
+
+    //редактирование taskTitle
+    const changeTaskTitle = (taskId: string, title: string, todoListId:string) => {
+        setTasks({
+            ...tasks,
+            [todoListId]: tasks[todoListId].map(t => t.id === taskId
+                ? {...t, title: title}
+                : t)
+        })
     }
 
     //-----ДОБАВЛЕНИЕ нового листа, пользователь передает title------
@@ -172,7 +187,9 @@ function App() {
                     addTask={addTask}
                     removeTask={removeTask}
                     removeTodoList={removeTodoList}
+                    changeTaskTitle={changeTaskTitle}
                     changeTaskStatus={changeTaskStatus}
+                    changeTodoListTitle={changeTodoListTitle}
                     changeTodoListFilter={changeTodoListFilter}
                 />
 
