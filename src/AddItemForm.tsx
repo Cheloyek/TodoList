@@ -1,4 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {IconButton, TextField} from "@material-ui/core";
+import {AddCircleTwoTone} from "@material-ui/icons";
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
@@ -16,7 +18,7 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
 
     //2. Хранение и вывод ошибки
     const [error, setError] = useState<boolean>(false)
-    const errorMessage = error ? <div style={{fontWeight: "bold", color: "hotpink"}}>Title is required!</div>: null //вывод сообщения об ошибке
+    // const errorMessage = error ? <div style={{fontWeight: "bold", color: "hotpink"}}>Title is required!</div>: null //вывод сообщения об ошибке
 
     //3. При нажатии на кнопку или enter добавляется Item
     const onEnterDownAddItem = (e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && addItem()
@@ -35,15 +37,26 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
 
     return (
         <div>
-            <input
+            {/*<input*/}
+            {/*    value={title}*/}
+            {/*    onChange={onChangeSetLocalTitle}*/}
+            {/*    onKeyDown={onEnterDownAddItem}*/}
+            {/*    className={error ? 'error' : ''} // обработка error*/}
+            {/*/>*/}
+            <TextField
+                label={'Add task'}
+                variant={'outlined'}
+                size={'small'}
                 value={title}
                 onChange={onChangeSetLocalTitle}
                 onKeyDown={onEnterDownAddItem}
-                className={error ? 'error' : ''} // обработка error
+                // className={error ? 'error' : ''} // обработка error
+                error={error}
+                helperText={error && 'Title is required!'}
             />
-            <button onClick= {addItem}>+</button>
+            <IconButton onClick= {addItem} color={'default'}><AddCircleTwoTone/></IconButton>
             {/*вывод сообщения при ошибке*/}
-            {errorMessage}
+            {/*errorMessage*/}
         </div>
     )
 };

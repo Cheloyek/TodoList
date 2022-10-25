@@ -1,45 +1,45 @@
-.App {
-  padding: 30px;
-  display: flex;
-}
+/*.App {*/
+/*  padding: 30px;*/
+/*  display: flex;*/
+/*}*/
 
-.App > div {
-  margin-right: 50px;
-}
+/*.App > div {*/
+/*  margin-right: 50px;*/
+/*}*/
 
-/*для выполненной task*/
-.isDone {
-  text-decoration: line-through;
-  font-weight: bold;
-  color: limegreen;
-}
+/*!*для выполненной task*!*/
+/*.isDone {*/
+/*  text-decoration: line-through;*/
+/*  font-weight: bold;*/
+/*  color: limegreen;*/
+/*}*/
 
-/*для невыполненной task*/
-.notIsDone {
-  font-weight: bold;
-  color: hotpink;
-}
+/*!*для невыполненной task*!*/
+/*.notIsDone {*/
+/*  font-weight: bold;*/
+/*  color: hotpink;*/
+/*}*/
 
-/*для нажатой кнопки*/
-.active-btn {
-  background-color: green;
-  padding: 5px;
-  margin-right: 3px;
-  color: aquamarine;
-  font-weight: bold;
-  border-radius: 3px;
-  border: none;
-  cursor: pointer;
-}
+/*!*для нажатой кнопки*!*/
+/*.active-btn {*/
+/*  background-color: green;*/
+/*  padding: 5px;*/
+/*  margin-right: 3px;*/
+/*  color: aquamarine;*/
+/*  font-weight: bold;*/
+/*  border-radius: 3px;*/
+/*  border: none;*/
+/*  cursor: pointer;*/
+/*}*/
 
-/*для не нажатой кнопки*/
-.btn {
-  background-color: gray;
-  color: aquamarine;
-}
+/*!*для не нажатой кнопки*!*/
+/*.btn {*/
+/*  background-color: gray;*/
+/*  color: aquamarine;*/
+/*}*/
 
-/*если при вводе в input будет ошибка (например нет текста), то применит .error*/
-.error {
-  border: 2px solid hotpink;
-  outline: none;
-}
+/*!*если при вводе в input будет ошибка (например нет текста), то применит .error*!*/
+/*.error {*/
+/*  border: 2px solid hotpink;*/
+/*  outline: none;*/
+/*}*/

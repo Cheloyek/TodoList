@@ -3,6 +3,8 @@ import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 import {v1} from "uuid";
 import AddItemForm from "./AddItemForm";
+import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
+import {Menu} from "@material-ui/icons";
 
 
 
@@ -175,9 +177,11 @@ function App() {
     const todoListComponents = todoLists.map(tl => {
         const filteredTasks = getFilteredTasks(tasks[tl.id], tl.filter) // tasks[tl.id] - получает массив всех task листа. tl.filter = "all" | "active" | "completed"
         return (
+            <Grid item key={tl.id}>
+            <Paper style={{width:'280px', padding:'20px'}} elevation={8}>
                 <TodoList
                     //data
-                    key={tl.id}
+                    // key={tl.id}
                     title={tl.title}        // title из каждого листа
                     filter={tl.filter}      // "all" | "active" | "completed"
                     todoListId={tl.id}      //id из каждого листа для компонены
@@ -192,6 +196,8 @@ function App() {
                     changeTodoListTitle={changeTodoListTitle}
                     changeTodoListFilter={changeTodoListFilter}
                 />
+            </Paper>
+            </Grid>
 
         );
     })
@@ -199,9 +205,26 @@ function App() {
     // GUI:
         return (
                 <div className="App">
+                    <AppBar position="static">
+                        <Toolbar style={{justifyContent: "space-between"}}> {/*ToolBar - МЕНЮ*/}
+                            <IconButton edge="start" color="inherit" aria-label="menu">
+                                <Menu/>
+                            </IconButton>
+                            <Typography variant="h6">
+                                Todolists
+                            </Typography>
+                            <Button color="inherit" variant={"outlined"}>Login</Button>
+                        </Toolbar>
+                    </AppBar>
+                    <Container fixed>
+                        <Grid container style={{padding: '5px'}}>
                     Добавить лист
                     <AddItemForm addItem={addTodoList}/>
-                    {todoListComponents}
+                        </Grid>
+                        <Grid container spacing={5}> {/*отступ между листами*/}
+                            {todoListComponents}
+                        </Grid>
+                    </Container>
                 </div>
             )
 }
