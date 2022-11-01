@@ -11,7 +11,7 @@ import {Menu} from "@material-ui/icons";
 
 export type FilterValuesType = "all" | "active" | "completed" // filter Type
 
-type TodoListType = {
+export type TodoListType = {
     id: string,
     title: string,
     filter: FilterValuesType, //какие task показывает todolist
@@ -137,7 +137,7 @@ function App() {
             title: title,
             filter: "all"
         }
-
+        //const nextState = [...todolists, newTodoList]
         setTodoLists([...todoLists, newTodoList]) /*добавляет todolist в массив листов*/
         setTasks({...tasks, [newTodoListId]: [] }) /*в новый todoList добавили массив, в который будут добавляться новые tasks*/
     }
