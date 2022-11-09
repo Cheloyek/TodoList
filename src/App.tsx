@@ -18,7 +18,7 @@ export type TodoListType = {
 }
 
 // тип для структуры данных, в которой хранятся tasks
-type TasksStateType = {
+export type TasksStateType = {
     [todoListId: string]: Array<TaskType>
 }
 
