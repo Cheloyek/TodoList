@@ -1,4 +1,4 @@
-import {FilterValuesType, TasksStateType, TodoListType} from "../App";
+import { TasksStateType } from "../App";
 import {v1} from "uuid";
 import {TaskType} from "../TodoList";
 import {AddTodoListAC, RemoveTodoListAC} from "./todolists-reducer";
@@ -72,6 +72,8 @@ export const tasksReducer = (state: TasksStateType, action: ActionType): TasksSt
             throw new Error("I don't understand this type")
     }
 };
+
+
 
 export const removeTaskAC = (taskId: string, todolistId: string) => {
     return {type: 'REMOVE TASK', taskId, todolistId} as const

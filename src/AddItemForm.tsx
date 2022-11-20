@@ -1,6 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {IconButton, TextField} from "@material-ui/core";
 import {AddCircleTwoTone} from "@material-ui/icons";
+import './App.css'
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
@@ -44,7 +45,7 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
             {/*    className={error ? 'error' : ''} // обработка error*/}
             {/*/>*/}
             <TextField
-                label={'Add task'}
+                label={'Add'}
                 variant={'outlined'}
                 size={'small'}
                 value={title}
@@ -53,6 +54,7 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
                 // className={error ? 'error' : ''} // обработка error
                 error={error}
                 helperText={error && 'Title is required!'}
+                className={'addItem'}
             />
             <IconButton onClick= {addItem} color={'default'}><AddCircleTwoTone/></IconButton>
             {/*вывод сообщения при ошибке*/}
