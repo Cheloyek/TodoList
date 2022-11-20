@@ -1,38 +1,41 @@
 import {FilterValuesType, TodoListType} from "../App";
 import {v1} from "uuid";
 
-type RemoveTodoListAT = {
+export type RemoveTodoListAT = {
     type: "REMOVE-TODOLIST" // тип действия
     todolistId: string      // id
 }
 
-type AddTodoListAT ={
+export type AddTodoListAT ={
     type: "ADD-TODOLIST"
     title: string
     todoListId: string
 }
 
-type ChangeTodoListFilterAT = {
+export type ChangeTodoListFilterAT = {
     type: "CHANGE-TODOLIST-FILTER"
     filter: FilterValuesType
     todolistId: string
 }
 
-type ChangeTodoListTitleAT = {
+export type ChangeTodoListTitleAT = {
     type: "CHANGE-TODOLIST-TITLE"
     title: string
     todolistId: string
 }
 
+const initialState: Array<TodoListType> = []
+
 type ActionType = RemoveTodoListAT | AddTodoListAT | ChangeTodoListFilterAT | ChangeTodoListTitleAT
 
 // чистая функция нужна легко
 // (объект, действие)
-export const todolistsReducer = (todolists: Array<TodoListType>, action: ActionType): Array<TodoListType> => {
+
+export const todolistsReducer = (state= initialState, action: ActionType): Array<TodoListType> => {
     //если в action будет removetodolist то вернет обновленный state
     switch (action.type) {
         case "REMOVE-TODOLIST":
-            return todolists.filter(tl => tl.id !== action.todolistId)
+            return state.filter(tl => tl.id !== action.todolistId)
         case "ADD-TODOLIST":
             // const newTodoListId: string = v1()
             const newTodoList: TodoListType = {
@@ -40,13 +43,13 @@ export const todolistsReducer = (todolists: Array<TodoListType>, action: ActionT
                 title: action.title,
                 filter: "all"
             }
-            return [...todolists, newTodoList]
+            return [...state, newTodoList]
         case "CHANGE-TODOLIST-FILTER":
-            return todolists.map(tl => tl.id === action.todolistId ? {...tl, filter: action.filter}: tl)
+            return state.map(tl => tl.id === action.todolistId ? {...tl, filter: action.filter}: tl)
         case "CHANGE-TODOLIST-TITLE":
-            return todolists.map(tl => tl.id === action.todolistId ? {...tl, title: action.title}: tl)
+            return state.map(tl => tl.id === action.todolistId ? {...tl, title: action.title}: tl)
         default:
-            return todolists
+            return state
     }
 }
 

@@ -1,15 +1,24 @@
-import React, {useReducer, useState} from 'react';
+import React, {Reducer, useReducer, useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 import {v1} from "uuid";
 import AddItemForm from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
-import {todolistsReducer} from "./store/todolists-reducer";
-import {tasksReducer} from "./store/tasks-reducer";
-
-
-
+import {
+    AddTodoListAC, AddTodoListAT,
+    ChangeTodoListFilterAC, ChangeTodoListFilterAT,
+    ChangeTodoListTitleAC, ChangeTodoListTitleAT,
+    RemoveTodoListAC, RemoveTodoListAT,
+    todolistsReducer
+} from "./store/todolists-reducer";
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    tasksReducer
+} from "./store/tasks-reducer";
 
 export type FilterValuesType = "all" | "active" | "completed" // filter Type
 
@@ -25,7 +34,7 @@ export type TasksStateType = {
 }
 
 // component
-function App() {
+function AppWithReducers() {
 
     // BLL (бизнес логика, хранение данных):
     // с возможностью удаления/добавления новых листов
@@ -103,29 +112,39 @@ function App() {
         //фильтруем исходный массив
         // copyTasks[todoListId] = copyTasks[todoListId].filter((t) => t.id !== taskId)
         // setTasks(copyTasks) // передаем в setTasks скопированный и отфильтрованный массив
-
         // 2 вариант
         // setTasks({...tasks,
         //     [todoListId]: tasks[todoListId].filter((t) => t.id !== taskId)
         // })
-        dispatchToTasks()
+
+        let action = removeTaskAC(taskId, todoListId)
+        dispatchToTasks(action)
 
     }
 
     const changeTodoListFilter = (filter: FilterValuesType, todoListId: string) => {
         //создание копии масс листов, в массиве проверяет каждый и находит t.id === todoListId и создается копия листа в filter: filter
-        setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, filter: filter}: tl))
+        // setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, filter: filter}: tl))
+
+        let action = ChangeTodoListFilterAC(filter, todoListId)
+        dispatchToTodoList(action)
     }
 
     const changeTodoListTitle = (title: string, todoListId: string) => {
-        setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, title: title}: tl))
+        // setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, title: title}: tl))
+
+        let action = ChangeTodoListTitleAC(title, todoListId)
+        dispatchToTodoList(action)
     }
 
     //удаление листа
     const removeTodoList = (todoListId: string) => {
         //фильтр листов (у которых id !== todoListId удаляет лист)
-        setTodoLists(todoLists.filter(tl => tl.id !== todoListId)) // удаляет только лист, tasks не удалились
-        delete tasks[todoListId] // удаление tasks удаленного листа
+        // setTodoLists(todoLists.filter(tl => tl.id !== todoListId)) // удаляет только лист, tasks не удалились
+        // delete tasks[todoListId] // удаление tasks удаленного листа
+        let action = RemoveTodoListAC(todoListId)
+        dispatchToTodoList(action)
+        dispatchToTasks(action)
     }
 
         //при нажатии на checkbox находит значение и меняет isDone
@@ -136,21 +155,25 @@ function App() {
 
         //создание массива [todoListId]: tasks[todoListId], map по каждой task для t.id === taskId добавление isDone: newTaskStatus
         // новый объект, внутри новый массив, внутри массива новая task, внутри которой произошли изменения
-        setTasks({...tasks,
-            [todoListId]: tasks[todoListId].map(t => t.id === taskId
-                ? {...t, isDone: newTaskStatus}
-                : t)
-    })
+    //     setTasks({...tasks,
+    //         [todoListId]: tasks[todoListId].map(t => t.id === taskId
+    //             ? {...t, isDone: newTaskStatus}
+    //             : t)
+    // })
+        let action = changeTaskStatusAC(taskId, newTaskStatus, todoListId)
+        dispatchToTasks(action)
     }
 
     //редактирование taskTitle
     const changeTaskTitle = (taskId: string, title: string, todoListId:string) => {
-        setTasks({
-            ...tasks,
-            [todoListId]: tasks[todoListId].map(t => t.id === taskId
-                ? {...t, title: title}
-                : t)
-        })
+        // setTasks({
+        //     ...tasks,
+        //     [todoListId]: tasks[todoListId].map(t => t.id === taskId
+        //         ? {...t, title: title}
+        //         : t)
+        // })
+        let action = changeTaskTitleAC(taskId,title,todoListId)
+        dispatchToTasks(action)
     }
 
     //-----ДОБАВЛЕНИЕ нового листа, пользователь передает title------
@@ -162,8 +185,11 @@ function App() {
             filter: "all"
         }
         //const nextState = [...todolists, newTodoList]
-        setTodoLists([...todoLists, newTodoList]) /*добавляет todolist в массив листов*/
-        setTasks({...tasks, [newTodoListId]: [] }) /*в новый todoList добавили массив, в который будут добавляться новые tasks*/
+        // setTodoLists([...todoLists, newTodoList]) /*добавляет todolist в массив листов*/
+        // setTasks({...tasks, [newTodoListId]: [] }) /*в новый todoList добавили массив, в который будут добавляться новые tasks*/
+        let action = AddTodoListAC(title)
+        dispatchToTodoList(action)
+        dispatchToTasks(action)
     }
 
     //добавление task
@@ -174,8 +200,11 @@ function App() {
             isDone: false
         }
         //создание копии, в копии создан новый массив, добавлен новый task в начало массива
-        setTasks({...tasks,
-            [todoListId]: [newTask, ...tasks[todoListId]]})
+        // setTasks({...tasks,
+        //     [todoListId]: [newTask, ...tasks[todoListId]]})
+
+        let action = addTaskAC(title, todoListId)
+        dispatchToTasks(action)
 
         //добавление новой task в список
         // const copyTasks = [...tasks]
@@ -253,7 +282,7 @@ function App() {
             )
 }
 
-export default App;
+export default AppWithReducers;
 
 
 
