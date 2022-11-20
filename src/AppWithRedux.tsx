@@ -17,10 +17,10 @@ import {
     changeTaskStatusAC,
     changeTaskTitleAC,
     removeTaskAC,
-    tasksReducer
 } from "./store/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType, store} from "./store/store";
+import TodoListWithRedux from "./TodoListWithRedux";
 
 export type FilterValuesType = "all" | "active" | "completed" // filter Type
 
@@ -43,7 +43,7 @@ function AppWithRedux() {
 
     // <тип state, ожидаемое значение>
     const todoLists = useSelector<AppRootStateType, Array<TodoListType>>(state => state.todolists)
-    const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+    // const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
 
     const dispatch = useDispatch()
 
@@ -111,26 +111,29 @@ function AppWithRedux() {
 
     // проходится по массиву листов (каждый лист => возвращает return). В результате появится массив компонент
     const todoListComponents = todoLists.map(tl => {
-        const filteredTasks = getFilteredTasks(tasks[tl.id], tl.filter) // tasks[tl.id] - получает массив всех task листа. tl.filter = "all" | "active" | "completed"
+        // const filteredTasks = getFilteredTasks(tasks[tl.id], tl.filter) // tasks[tl.id] - получает массив всех task листа. tl.filter = "all" | "active" | "completed"
         return (
             <Grid item key={tl.id}>
             <Paper style={{width:'280px', padding:'20px'}} elevation={8}>
-                <TodoList
-                    //data
-                    // key={tl.id}
-                    title={tl.title}        // title из каждого листа
-                    filter={tl.filter}      // "all" | "active" | "completed"
-                    todoListId={tl.id}      //id из каждого листа для компонены
-                    tasks={filteredTasks}
+                {/*<TodoList*/}
+                {/*    data*/}
+                {/*    key={tl.id}*/}
+                {/*    title={tl.title}        // title из каждого листа*/}
+                {/*    ilter={tl.filter}      // "all" | "active" | "completed"*/}
+                {/*    todoListId={tl.id}      //id из каждого листа для компонены*/}
+                {/*    tasks={filteredTasks}*/}
 
-                    //functions
-                    addTask={addTask}
-                    removeTask={removeTask}
-                    removeTodoList={removeTodoList}
-                    changeTaskTitle={changeTaskTitle}
-                    changeTaskStatus={changeTaskStatus}
-                    changeTodoListTitle={changeTodoListTitle}
-                    changeTodoListFilter={changeTodoListFilter}
+                {/*    functions*/}
+                {/*    addTask={addTask}*/}
+                {/*    removeTask={removeTask}*/}
+                {/*    removeTodoList={removeTodoList}*/}
+                {/*    changeTaskTitle={changeTaskTitle}*/}
+                {/*    changeTaskStatus={changeTaskStatus}*/}
+                {/*    changeTodoListTitle={changeTodoListTitle}*/}
+                {/*    changeTodoListFilter={changeTodoListFilter}*/}
+                {/*/>*/}
+                <TodoListWithRedux
+                    todolist={tl}
                 />
             </Paper>
             </Grid>
